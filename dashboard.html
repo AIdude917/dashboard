@@ -13,25 +13,35 @@
     h1 {
       color: #333;
     }
-    .form-container, .student-list {
+    .header, .form-container, .student-list, .stats {
       background: #fff;
       padding: 20px;
       border-radius: 6px;
       margin-bottom: 20px;
     }
-    label {
-      display: block;
-      margin-top: 10px;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    input {
+    .header h1 {
+      font-size: 1.8em;
+    }
+    .stats {
+      display: flex;
+      justify-content: space-between;
+    }
+    .stats div {
+      text-align: center;
+      font-size: 1.2em;
+    }
+    .form-container input, .form-container button {
       padding: 8px;
       width: 100%;
       margin-top: 5px;
     }
-    button {
-      margin-top: 15px;
-      padding: 10px 15px;
-      background: #28a745;
+    .form-container button {
+      background-color: #28a745;
       color: white;
       border: none;
       cursor: pointer;
@@ -44,10 +54,25 @@
       padding: 12px;
       border-bottom: 1px solid #ccc;
     }
+    .last-updated {
+      font-size: 0.9em;
+      color: #666;
+      text-align: right;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <h1>Student Management Dashboard</h1>
+  <div class="header">
+    <h1>Student Management Dashboard</h1>
+  </div>
+
+  <div class="stats">
+    <div>
+      <strong>Total Students</strong>
+      <p id="total-students">0</p>
+    </div>
+  </div>
 
   <div class="form-container">
     <h2>Add Student</h2>
@@ -58,8 +83,8 @@
       <label for="email">Email:</label>
       <input type="email" id="email" required />
 
-      <label for="age">Age:</label>
-      <input type="number" id="age" required />
+      <label for="grade">Grade:</label>
+      <input type="number" id="grade" required />
 
       <button type="submit">Add Student</button>
     </form>
@@ -72,7 +97,7 @@
         <tr>
           <th>Name</th>
           <th>Email</th>
-          <th>Age</th>
+          <th>Grade</th>
         </tr>
       </thead>
       <tbody>
@@ -81,24 +106,40 @@
     </table>
   </div>
 
+  <div class="last-updated">Last Updated: 04/15/2025 05:17:40 pm</div>
+
   <script>
     const studentForm = document.getElementById('studentForm');
     const studentsTable = document.getElementById('studentsTable').getElementsByTagName('tbody')[0];
+    const totalStudents = document.getElementById('total-students');
+
+    let students = [];
 
     studentForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
-      const age = document.getElementById('age').value;
+      const grade = document.getElementById('grade').value;
 
+      const newStudent = { name, email, grade };
+      students.push(newStudent);
+
+      // Add new student to the table
       const row = studentsTable.insertRow();
       row.insertCell(0).textContent = name;
       row.insertCell(1).textContent = email;
-      row.insertCell(2).textContent = age;
+      row.insertCell(2).textContent = grade;
 
+      // Update stats
+      updateStats();
+      
       studentForm.reset();
     });
+
+    function updateStats() {
+      totalStudents.textContent = students.length;
+    }
   </script>
 </body>
 </html>
